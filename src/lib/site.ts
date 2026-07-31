@@ -6,7 +6,7 @@ export const SITE = {
   phone: "+91 90000 00000",
   whatsapp: "919000000000",
   email: "brilliantdesktuitions@gmail.com",
-  addressLines: ["Brilliant Desk Tuitions", "Bengaluru, Karnataka, India"],
+  addressLines: ["Brilliant Desk Tuitions", "Hongasandra, Bengaluru, Karnataka 560068"],
   mapsShareUrl: "https://share.google/WnqY7Yl6ans4l0z6r",
   mapsEmbedUrl:
     "https://maps.google.com/maps?q=Brilliant%20Desk%20Tuitions%20Bengaluru&t=&z=15&ie=UTF8&iwloc=&output=embed",
