@@ -1,24 +1,246 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { BookOpen, Calculator, FlaskConical, Globe2, Languages, PenLine, Quote, Star } from "lucide-react";
+import { SiteLayout } from "@/components/site/SiteLayout";
+import { SITE } from "@/lib/site";
+import { supabase } from "@/integrations/supabase/client";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Brilliant Desk Tuitions — Classes 1 to 10 Tuition in Bengaluru" },
+      {
+        name: "description",
+        content:
+          "Since 2017, Brilliant Desk Tuitions coaches Classes 1-10 in State (KSEEB), CBSE and ICSE syllabus. Small batches, weekly tests, free notes and previous year papers.",
+      },
+      { property: "og:title", content: "Brilliant Desk Tuitions — Classes 1 to 10" },
+      {
+        property: "og:description",
+        content: "State, CBSE and ICSE tuition for Classes 1-10 in Bengaluru. Parent and student reviews inside.",
+      },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+const SUBJECTS = [
+  { icon: Calculator, name: "Mathematics", note: "Concept drills, shortcut-free clarity" },
+  { icon: FlaskConical, name: "Science", note: "Physics, Chemistry & Biology basics" },
+  { icon: Globe2, name: "Social Science", note: "Maps, timelines and answer framing" },
+  { icon: Languages, name: "Kannada & Hindi", note: "Grammar, writing and recitation" },
+  { icon: BookOpen, name: "English", note: "Reading, grammar and composition" },
+  { icon: PenLine, name: "Exam Writing", note: "Presentation and time management" },
+];
+
+function Home() {
+  const { data: reviews = [] } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <SiteLayout>
+      {/* Hero */}
+      <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 pb-12 pt-16 md:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <span className="eyebrow">Bengaluru · {SITE.since}</span>
+          <h1 className="mt-6 text-[clamp(34px,4.6vw,54px)] leading-[1.06]">
+            Steady coaching for <em className="not-italic text-pen">Classes 1 to 10</em>, in the
+            syllabus your child actually writes.
+          </h1>
+          <p className="mt-5 max-w-[46ch] text-lg text-muted-foreground">
+            State (KSEEB), CBSE and ICSE — taught in small batches with weekly tests, written
+            practice and a parent update every week.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/contact"
+              className="rounded-lg bg-pen px-6 py-3.5 font-semibold text-paper transition-colors hover:bg-pen/90"
+            >
+              Book a free demo class
+            </Link>
+            <Link
+              to="/materials"
+              className="rounded-lg border border-ink px-6 py-3.5 font-semibold text-ink transition-colors hover:bg-ink hover:text-paper"
+            >
+              Free study material
+            </Link>
+          </div>
+          <div className="mt-10 flex flex-wrap gap-8">
+            {[
+              { n: "8+", l: "Years teaching" },
+              { n: "1–10", l: "Classes covered" },
+              { n: "3", l: "Boards supported" },
+            ].map((s) => (
+              <div key={s.l}>
+                <b className="block font-display text-2xl">{s.n}</b>
+                <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                  {s.l}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="paper-card rotate-[1.2deg] overflow-hidden transition-transform hover:rotate-0">
+          <div className="flex items-center justify-between bg-ink px-6 py-4 text-paper">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.08em] opacity-75">
+                What every week looks like
+              </p>
+              <h3 className="font-display text-base">Weekly rhythm</h3>
+            </div>
+            <span className="font-mono text-xs opacity-75">2025–26</span>
+          </div>
+          <div className="px-6 pb-5 pt-4">
+            {[
+              ["Mon – Wed", "Concept classes"],
+              ["Thursday", "Written practice"],
+              ["Friday", "Doubt clearing"],
+              ["Saturday", "Weekly test"],
+              ["Sunday", "Parent update"],
+            ].map(([d, v]) => (
+              <div
+                key={d}
+                className="flex items-baseline justify-between border-b border-dotted border-line py-2.5 text-[14.5px]"
+              >
+                <span className="text-ink-soft">{d}</span>
+                <span className="font-mono font-semibold">{v}</span>
+              </div>
+            ))}
+            <div className="-mx-6 mt-4 flex items-center justify-between border-t-2 border-marigold bg-[oklch(0.955_0.03_85)] px-6 py-3.5">
+              <span>Batch size</span>
+              <b className="font-mono text-xl text-marigold-deep">8 max</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quotation */}
+      <section className="bg-ink px-6 py-16 text-paper">
+        <div className="mx-auto flex max-w-4xl gap-5">
+          <Quote className="h-9 w-9 flex-none text-marigold" />
+          <div>
+            <p className="font-display text-2xl leading-snug md:text-3xl">
+              "Education is not the filling of a pail, but the lighting of a fire."
+            </p>
+            <p className="mt-3 font-mono text-xs uppercase tracking-widest text-paper/60">
+              — W. B. Yeats
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Subjects */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mb-11 max-w-xl">
+          <span className="sec-eyebrow">Subjects</span>
+          <h2 className="text-[clamp(26px,3.4vw,36px)]">Everything on the report card</h2>
+          <p className="mt-3 text-muted-foreground">
+            Primary to Class 10, taught to the exact board pattern your child writes.
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {SUBJECTS.map((s) => (
+            <div key={s.name} className="paper-card p-6">
+              <s.icon className="mb-3 h-8 w-8 text-marigold-deep" />
+              <h3 className="font-sans text-[17px] font-semibold">{s.name}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{s.note}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* About snippet */}
+      <section className="bg-paper-2 px-6 py-20">
+        <div className="mx-auto grid max-w-6xl gap-14 md:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <span className="sec-eyebrow">About the tuition</span>
+            <h2 className="text-[clamp(26px,3.4vw,36px)]">A desk, a plan, and steady progress</h2>
+            <p className="mt-4 text-muted-foreground">
+              Brilliant Desk Tuitions started in 2017 with one classroom in Bengaluru and a simple
+              promise — no child sits at the back. Batches stay small, every test is corrected by
+              hand, and parents hear from us every single week.
+            </p>
+            <Link to="/about" className="mt-6 inline-block font-semibold text-pen underline-offset-4 hover:underline">
+              Read the full story →
+            </Link>
+          </div>
+          <ul className="grid gap-4">
+            {[
+              "Separate batches for Classes 1-5, 6-8 and 9-10.",
+              "Syllabus-matched teaching for KSEEB, CBSE and ICSE.",
+              "Weekly written tests with corrected answer scripts.",
+              "Free notes, previous year papers and model papers online.",
+              "Extra doubt-clearing hours before board exams.",
+            ].map((p) => (
+              <li key={p} className="flex gap-3 text-[15px] text-ink-soft">
+                <span className="font-bold text-pen">—</span>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="bg-ink px-6 py-20 text-paper">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-11 max-w-xl">
+            <span className="sec-eyebrow text-marigold">Reviews</span>
+            <h2 className="text-[clamp(26px,3.4vw,36px)]">What parents and students say</h2>
+            <p className="mt-3 text-paper/70">
+              Honest words from families who sat with us through a full academic year.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {reviews.map((r) => (
+              <div
+                key={r.id}
+                className="rounded-xl border border-paper/15 bg-paper/[0.06] p-6 text-[14.5px]"
+              >
+                <div className="mb-3 flex gap-1">
+                  {Array.from({ length: r.rating }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-marigold text-marigold" />
+                  ))}
+                </div>
+                <p className="text-paper/85">{r.quote}</p>
+                <p className="mt-4 text-sm font-semibold text-marigold">{r.student_name}</p>
+                {r.detail && <p className="text-xs text-paper/55">{r.detail}</p>}
+              </div>
+            ))}
+            {reviews.length === 0 && (
+              <p className="text-paper/60">Reviews will appear here soon.</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="paper-card flex flex-col items-start justify-between gap-6 p-10 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-2xl">Admissions open for the new academic year</h2>
+            <p className="mt-2 text-muted-foreground">
+              Classes 1 to 10 · State, CBSE and ICSE · Limited seats per batch.
+            </p>
+          </div>
+          <Link
+            to="/contact"
+            className="rounded-lg bg-pen px-6 py-3.5 font-semibold text-paper hover:bg-pen/90"
+          >
+            Talk to the teacher
+          </Link>
+        </div>
+      </section>
+    </SiteLayout>
   );
 }
