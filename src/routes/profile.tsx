@@ -150,7 +150,7 @@ function Field({
 }: {
   icon: typeof Award;
   label: string;
-  value?: string | null;
+  value: string | null | undefined;
 }) {
   return (
     <div className="bg-card p-6">
