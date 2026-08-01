@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Calculator, FlaskConical, Globe2, Languages, PenLine, Quote, Star } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { ReviewForm } from "@/components/site/ReviewForm";
 import { SITE } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -197,8 +198,13 @@ function Home() {
               <p className="text-paper/60">Reviews will appear here soon.</p>
             )}
           </div>
+
+          <div className="mt-10 max-w-2xl">
+            <ReviewForm />
+          </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-6 py-20">
