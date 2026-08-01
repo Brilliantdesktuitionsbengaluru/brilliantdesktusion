@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Clock, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { ClassTimings } from "@/components/site/ClassTimings";
 import { SITE, BOARDS, CLASS_LEVELS } from "@/lib/site";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -69,7 +70,7 @@ function Contact() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="paper-card p-6">
+            <a href={`tel:+${SITE.whatsapp}`} className="paper-card p-6">
               <Phone className="mb-3 h-6 w-6 text-pen" />
               <p className="font-semibold">Call</p>
               <p className="font-mono text-sm text-muted-foreground">{SITE.phone}</p>
@@ -77,7 +78,7 @@ function Contact() {
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noreferrer" className="paper-card p-6">
               <MessageCircle className="mb-3 h-6 w-6 text-exam-green" />
               <p className="font-semibold">WhatsApp</p>
-              <p className="text-sm text-muted-foreground">Quickest reply</p>
+              <p className="font-mono text-sm text-muted-foreground">{SITE.phone}</p>
             </a>
             <a href={`mailto:${SITE.email}`} className="paper-card p-6 sm:col-span-2">
               <Mail className="mb-3 h-6 w-6 text-pen" />
@@ -86,22 +87,8 @@ function Contact() {
             </a>
           </div>
 
-          <div className="paper-card p-6">
-            <div className="flex gap-4">
-              <Clock className="h-6 w-6 flex-none text-pen" />
-              <div className="w-full">
-                <p className="font-semibold">Class timings</p>
-                <div className="mt-2 grid gap-1.5">
-                  {SITE.hours.map((h) => (
-                    <div key={h.day} className="flex justify-between border-b border-dotted border-line pb-1.5 text-sm">
-                      <span className="text-ink-soft">{h.day}</span>
-                      <span className="font-mono text-muted-foreground">{h.time}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <ClassTimings />
+
         </div>
 
         <div className="space-y-4">
