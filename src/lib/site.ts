@@ -11,11 +11,6 @@ export const SITE = {
   mapsShareUrl: "https://share.google/WnqY7Yl6ans4l0z6r",
   mapsEmbedUrl:
     "https://maps.google.com/maps?q=Brilliant%20Desk%20Tuitions%20Bengaluru&t=&z=15&ie=UTF8&iwloc=&output=embed",
-  hours: [
-    { day: "Monday – Friday", time: "4:00 PM – 8:30 PM" },
-    { day: "Saturday", time: "10:00 AM – 6:00 PM" },
-    { day: "Sunday", time: "Doubt-clearing & tests (by batch)" },
-  ],
 } as const;
 
 export const BOARDS = ["KSEEB (State)", "CBSE", "ICSE"] as const;
