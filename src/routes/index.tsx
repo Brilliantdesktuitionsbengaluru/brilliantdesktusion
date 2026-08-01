@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Calculator, FlaskConical, Globe2, Languages, PenLine, Quote, Star } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { ReviewForm } from "@/components/site/ReviewForm";
 import { SITE } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -49,10 +50,10 @@ function Home() {
   return (
     <SiteLayout>
       {/* Hero */}
-      <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 pb-12 pt-16 md:grid-cols-[1.1fr_0.9fr]">
+      <section className="mx-auto max-w-6xl px-6 pb-12 pt-16">
         <div>
           <span className="eyebrow">Bengaluru · {SITE.since}</span>
-          <h1 className="mt-6 text-[clamp(34px,4.6vw,54px)] leading-[1.06]">
+          <h1 className="mt-6 max-w-3xl text-[clamp(34px,4.6vw,54px)] leading-[1.06]">
             Steady coaching for <em className="not-italic text-pen">Classes 1 to 10</em>, in the
             syllabus your child actually writes.
           </h1>
@@ -67,6 +68,14 @@ function Home() {
             >
               Book a free demo class
             </Link>
+            <a
+              href={`https://wa.me/${SITE.whatsapp}`}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-lg bg-exam-green px-6 py-3.5 font-semibold text-paper transition-opacity hover:opacity-90"
+            >
+              WhatsApp {SITE.phone}
+            </a>
             <Link
               to="/materials"
               className="rounded-lg border border-ink px-6 py-3.5 font-semibold text-ink transition-colors hover:bg-ink hover:text-paper"
@@ -89,40 +98,8 @@ function Home() {
             ))}
           </div>
         </div>
-
-        <div className="paper-card rotate-[1.2deg] overflow-hidden transition-transform hover:rotate-0">
-          <div className="flex items-center justify-between bg-ink px-6 py-4 text-paper">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] opacity-75">
-                What every week looks like
-              </p>
-              <h3 className="font-display text-base">Weekly rhythm</h3>
-            </div>
-            <span className="font-mono text-xs opacity-75">2025–26</span>
-          </div>
-          <div className="px-6 pb-5 pt-4">
-            {[
-              ["Mon – Wed", "Concept classes"],
-              ["Thursday", "Written practice"],
-              ["Friday", "Doubt clearing"],
-              ["Saturday", "Weekly test"],
-              ["Sunday", "Parent update"],
-            ].map(([d, v]) => (
-              <div
-                key={d}
-                className="flex items-baseline justify-between border-b border-dotted border-line py-2.5 text-[14.5px]"
-              >
-                <span className="text-ink-soft">{d}</span>
-                <span className="font-mono font-semibold">{v}</span>
-              </div>
-            ))}
-            <div className="-mx-6 mt-4 flex items-center justify-between border-t-2 border-marigold bg-[oklch(0.955_0.03_85)] px-6 py-3.5">
-              <span>Batch size</span>
-              <b className="font-mono text-xl text-marigold-deep">8 max</b>
-            </div>
-          </div>
-        </div>
       </section>
+
 
       {/* Quotation */}
       <section className="bg-ink px-6 py-16 text-paper">
@@ -221,8 +198,13 @@ function Home() {
               <p className="text-paper/60">Reviews will appear here soon.</p>
             )}
           </div>
+
+          <div className="mt-10 max-w-2xl">
+            <ReviewForm />
+          </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-6 py-20">

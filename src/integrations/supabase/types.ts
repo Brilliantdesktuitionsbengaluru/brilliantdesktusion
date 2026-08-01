@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      class_timings: {
+        Row: {
+          created_at: string
+          day: string
+          id: string
+          sort_order: number
+          time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          id?: string
+          sort_order?: number
+          time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          id?: string
+          sort_order?: number
+          time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number | null

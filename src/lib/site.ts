@@ -3,18 +3,14 @@ export const SITE = {
   kannada: "ಬ್ರಿಲಿಯಂಟ್ ಡೆಸ್ಕ್ ಟ್ಯೂಷನ್ಸ್",
   since: "Since 2017",
   tagline: "Tuition for Classes 1 to 10 — State (KSEEB), CBSE & ICSE",
-  phone: "+91 90000 00000",
-  whatsapp: "919000000000",
+  phone: "099025 43544",
+  phoneIntl: "+91 99025 43544",
+  whatsapp: "919902543544",
   email: "brilliantdesktuitions@gmail.com",
   addressLines: ["Brilliant Desk Tuitions", "Hongasandra, Bengaluru, Karnataka 560068"],
   mapsShareUrl: "https://share.google/WnqY7Yl6ans4l0z6r",
   mapsEmbedUrl:
     "https://maps.google.com/maps?q=Brilliant%20Desk%20Tuitions%20Bengaluru&t=&z=15&ie=UTF8&iwloc=&output=embed",
-  hours: [
-    { day: "Monday – Friday", time: "4:00 PM – 8:30 PM" },
-    { day: "Saturday", time: "10:00 AM – 6:00 PM" },
-    { day: "Sunday", time: "Doubt-clearing & tests (by batch)" },
-  ],
 } as const;
 
 export const BOARDS = ["KSEEB (State)", "CBSE", "ICSE"] as const;
