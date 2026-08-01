@@ -122,7 +122,17 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <div>
             <p className="font-mono text-[11px] uppercase tracking-widest text-marigold">Reach us</p>
             <div className="mt-4 grid gap-2 text-sm text-paper/80">
-              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`}>{SITE.phone}</a>
+              <a href={`tel:+${SITE.whatsapp}`} className="hover:text-marigold">
+                {SITE.phone}
+              </a>
+              <a
+                href={`https://wa.me/${SITE.whatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-marigold"
+              >
+                WhatsApp {SITE.phone}
+              </a>
               <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
               <a href={SITE.mapsShareUrl} target="_blank" rel="noreferrer" className="hover:text-marigold">
                 View location on Google Maps
