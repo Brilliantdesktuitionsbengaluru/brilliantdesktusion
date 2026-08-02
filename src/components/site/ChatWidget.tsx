@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { useVoice } from "@/lib/useVoice";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const WELCOME: ChatMessage = {
   role: "assistant",
   content:
-    "Hi! Ask me anything about classes, fees, timings, or admissions at Brilliant Desk Tuitions.",
+    "Hi! Ask me anything about classes, fees, timings, or admissions at Brilliant Desk Tuitions. You can also tap the mic and speak.",
 };
 
 export function ChatWidget() {
@@ -14,8 +15,11 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [voiceReply, setVoiceReply] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { listening, speaking, supported, startListening, stopListening, speak, stopSpeaking } =
+    useVoice();
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
@@ -23,12 +27,13 @@ export function ChatWidget() {
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
-  }, [open]);
+    else {
+      stopListening();
+      stopSpeaking();
+    }
+  }, [open, stopListening, stopSpeaking]);
 
-  async function send(e: React.FormEvent) {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text || loading) return;
+  async function ask(text: string) {
     const next = [...messages, { role: "user" as const, content: text }];
     setMessages(next);
     setInput("");
@@ -40,16 +45,10 @@ export function ChatWidget() {
         body: JSON.stringify({ messages: next.filter((m) => m !== WELCOME) }),
       });
       const data = (await res.json()) as { reply?: string; error?: string };
-      setMessages((m) => [
-        ...m,
-        {
-          role: "assistant",
-          content:
-            data.reply ??
-            data.error ??
-            "Sorry, something went wrong. Please WhatsApp 099025 43544.",
-        },
-      ]);
+      const content =
+        data.reply ?? data.error ?? "Sorry, something went wrong. Please WhatsApp 099025 43544.";
+      setMessages((m) => [...m, { role: "assistant", content }]);
+      if (voiceReply && data.reply) speak(data.reply);
     } catch {
       setMessages((m) => [
         ...m,
@@ -64,6 +63,29 @@ export function ChatWidget() {
     }
   }
 
+  function send(e: React.FormEvent) {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || loading) return;
+    void ask(text);
+  }
+
+  function toggleMic() {
+    if (listening) {
+      stopListening();
+      return;
+    }
+    stopSpeaking();
+    setVoiceReply(true);
+    startListening((text, final) => {
+      setInput(text);
+      if (final && text) {
+        stopListening();
+        void ask(text);
+      }
+    });
+  }
+
   return (
     <>
       {open && (
@@ -75,9 +97,24 @@ export function ChatWidget() {
                 Admissions assistant
               </p>
             </div>
-            <button aria-label="Close chat" onClick={() => setOpen(false)}>
-              <X className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              {supported.speaker && (
+                <button
+                  aria-label={voiceReply ? "Turn off voice replies" : "Turn on voice replies"}
+                  title={voiceReply ? "Voice replies on" : "Voice replies off"}
+                  onClick={() => {
+                    if (voiceReply) stopSpeaking();
+                    setVoiceReply((v) => !v);
+                  }}
+                  className={voiceReply ? "text-marigold" : "text-paper/60"}
+                >
+                  {voiceReply ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+                </button>
+              )}
+              <button aria-label="Close chat" onClick={() => setOpen(false)}>
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
           <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
@@ -108,14 +145,31 @@ export function ChatWidget() {
                 </div>
               </div>
             )}
+            {(listening || speaking) && (
+              <p className="text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                {listening ? "Listening…" : "Speaking…"}
+              </p>
+            )}
           </div>
 
           <form onSubmit={send} className="flex items-center gap-2 border-t border-line px-3 py-3">
+            {supported.mic && (
+              <button
+                type="button"
+                onClick={toggleMic}
+                aria-label={listening ? "Stop listening" : "Speak your question"}
+                className={`inline-flex h-10 w-10 flex-none items-center justify-center rounded-full border border-line ${
+                  listening ? "bg-marigold text-ink" : "bg-card text-ink-soft"
+                }`}
+              >
+                {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+              </button>
+            )}
             <input
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your question…"
+              placeholder={listening ? "Listening…" : "Type or speak your question…"}
               className="h-10 flex-1 rounded-full border border-input bg-card px-4 text-sm outline-none focus:border-marigold"
             />
             <button
