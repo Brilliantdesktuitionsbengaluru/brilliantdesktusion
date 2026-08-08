@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Brilliant Desk Tuitions coaches Classes 1-10 across State (KSEEB), CBSE and ICSE syllabus with small batches, weekly tests and free study material.",
+          "Brilliant Desk Tuitions coaches Classes 1-10 across State (KSEEB), CBSE and ICSE syllabuses with small batches, weekly tests and free study material.",
       },
       { property: "og:title", content: "Brilliant Desk Tuitions — Classes 1 to 10" },
       {

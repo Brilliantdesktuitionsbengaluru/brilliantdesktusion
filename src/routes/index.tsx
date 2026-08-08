@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Since 2017, Brilliant Desk Tuitions coaches Classes 1-10 in State (KSEEB), CBSE and ICSE syllabus. Small batches, weekly tests, free notes and previous year papers.",
+          "Since 2017, Brilliant Desk Tuitions coaches Classes 1-10 in the State (KSEEB), CBSE and ICSE syllabuses. Small batches, weekly tests, free notes and previous year papers.",
       },
       { property: "og:title", content: "Brilliant Desk Tuitions — Classes 1 to 10" },
       {
