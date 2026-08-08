@@ -32,8 +32,8 @@ function About() {
           A neighbourhood tuition centre that treats every mark like it matters.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-          {SITE.name} has been coaching Bengaluru students since 2017 — Classes 1 to 10, across
-          State (KSEEB), CBSE and ICSE syllabus.
+          {SITE.name} has been coaching Bengaluru students since 2017 — Classes 1 to 10, across the
+          State (KSEEB), CBSE and ICSE syllabuses.
         </p>
       </section>
 
