@@ -54,8 +54,8 @@ function Home() {
         <div>
           <span className="eyebrow">Bengaluru · {SITE.since}</span>
           <h1 className="mt-6 max-w-3xl text-[clamp(34px,4.6vw,54px)] leading-[1.06]">
-            Steady coaching for <em className="not-italic text-pen">Classes 1 to 10</em>, in the
-            exact syllabus your child writes.
+            Steady coaching for <em className="not-italic text-pen">Classes 1 to 10</em> in the exact
+            syllabus your child follows.
           </h1>
           <p className="mt-5 max-w-[46ch] text-lg text-muted-foreground">
             State (KSEEB), CBSE and ICSE — taught in small batches with weekly tests, written
