@@ -11,7 +11,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "How Brilliant Desk Tuitions teaches Classes 1-10 in Bengaluru: small batches, board-matched syllabus for KSEEB, CBSE and ICSE, weekly tests and parent updates.",
+          "How Brilliant Desk Tuitions teaches Classes 1-10 in Bengaluru: small batches, board-matched syllabuses for KSEEB, CBSE and ICSE, weekly tests and parent updates.",
       },
       { property: "og:title", content: "About Brilliant Desk Tuitions" },
       {
@@ -32,8 +32,8 @@ function About() {
           A neighbourhood tuition centre that treats every mark like it matters.
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-          {SITE.name} has been coaching Bengaluru students since 2017 — Classes 1 to 10, across
-          State (KSEEB), CBSE and ICSE syllabus.
+          {SITE.name} has been coaching Bengaluru students since 2017 — Classes 1 to 10, across the
+          State (KSEEB), CBSE and ICSE syllabuses.
         </p>
       </section>
 
@@ -45,8 +45,8 @@ function About() {
             knows exactly which chapter each child is stuck on.
           </p>
           <p>
-            Primary students (Classes 1-5) build reading, handwriting and number sense. Middle
-            school (6-8) moves to concept clarity and note-making. Classes 9 and 10 shift into full
+            Primary students (Classes 1–5) build reading, handwriting and number sense. Middle
+            school (6–8) moves to concept clarity and note-making. Classes 9 and 10 shift into full
             board preparation — chapter-wise tests, previous year papers and answer presentation.
           </p>
           <p>
