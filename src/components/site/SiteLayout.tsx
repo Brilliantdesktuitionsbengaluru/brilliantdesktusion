@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { Menu, X, LogIn, LayoutDashboard } from "lucide-react";
-import logo from "@/assets/logo.asset.json";
+import logo from "@/assets/logo.jpg";
 import { SITE } from "@/lib/site";
 import { useAuth } from "@/lib/useAuth";
 import { ChatWidget } from "@/components/site/ChatWidget";
@@ -25,7 +25,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src={logo.url}
+              src={logo}
               alt="Brilliant Desk Tuitions logo"
               className="h-11 w-11 rounded-xl object-cover"
             />
@@ -100,7 +100,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-3">
-              <img src={logo.url} alt="" className="h-12 w-12 rounded-xl object-cover" />
+              <img src={logo} alt="" className="h-12 w-12 rounded-xl object-cover" />
               <div>
                 <p className="font-display text-lg font-semibold">{SITE.name}</p>
                 <p className="font-mono text-[11px] uppercase tracking-widest text-paper/60">

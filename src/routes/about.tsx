@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award, HeartHandshake, Target, Users } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { SITE } from "@/lib/site";
-import logo from "@/assets/logo.asset.json";
+import logo from "@/assets/logo.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -65,7 +65,7 @@ function About() {
         </div>
 
         <div className="paper-card overflow-hidden">
-          <img src={logo.url} alt="Brilliant Desk Tuitions logo" className="w-full object-cover" />
+          <img src={logo} alt="Brilliant Desk Tuitions logo" className="w-full object-cover" />
           <div className="p-6">
             <p className="font-mono text-[11px] uppercase tracking-widest text-marigold-deep">
               {SITE.since}
