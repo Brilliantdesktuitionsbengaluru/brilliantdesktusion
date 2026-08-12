@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { env } from "cloudflare:workers";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -26,8 +27,8 @@ const STYLE = `HOW TO ANSWER:
 - Plain text only, no markdown headings or asterisks.`;
 
 async function rest(path: string) {
-  const url = process.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
-  const key = process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
+  const url = env.VITE_SUPABASE_URL || env.SUPABASE_URL;
+  const key = env.VITE_SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return [];
   try {
     const res = await fetch(`${url}/rest/v1/${path}`, {
@@ -87,24 +88,15 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const corsHeaders = {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        };
-
-        if (request.method === "OPTIONS") {
-          return new Response(null, { status: 204, headers: corsHeaders });
-        }
-
         const body = (await request.json()) as { messages?: ChatMessage[] };
         const history = Array.isArray(body.messages) ? body.messages.slice(-12) : [];
         if (history.length === 0) {
           return Response.json({ error: "No messages" }, { status: 400 });
         }
 
-        const lovableKey = process.env["LOVABLE_API_KEY"];
-        const openaiKey = process.env["OPENAI_API_KEY"];
+        // Read API key from Cloudflare env (NOT process.env)
+        const lovableKey = env.LOVABLE_API_KEY;
+        const openaiKey = env.OPENAI_API_KEY;
         const key = lovableKey || openaiKey;
         if (!key || (openaiKey && openaiKey.includes("..."))) {
           return Response.json(
@@ -121,7 +113,7 @@ export const Route = createFileRoute("/api/chat")({
           : "https://api.openai.com/v1/chat/completions";
         const model = lovableKey
           ? "google/gemini-3.6-flash"
-          : process.env["OPENAI_MODEL"] || "gpt-4o-mini";
+          : env.OPENAI_MODEL || "gpt-4o-mini";
 
         const live = await liveContext();
         const system = `You are the admissions assistant on the Brilliant Desk Tuitions website.\n\n${BASE_FACTS}\n\n${live}\n\n${STYLE}`;
