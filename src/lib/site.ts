@@ -6,7 +6,7 @@ export const SITE = {
   phone: "099025 43544",
   phoneIntl: "+91 99025 43544",
   whatsapp: "919902543544",
-  email: "brilliantdesktuitions@gmail.com",
+  email: "brilliantdesktuitionsbanglore@gmail.com",
   addressLines: ["Brilliant Desk Tuitions", "Hongasandra, Bengaluru, Karnataka 560068"],
   mapsShareUrl: "https://share.google/WnqY7Yl6ans4l0z6r",
   mapsEmbedUrl:
