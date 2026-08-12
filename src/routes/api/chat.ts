@@ -93,22 +93,40 @@ export const Route = createFileRoute("/api/chat")({
           return Response.json({ error: "No messages" }, { status: 400 });
         }
 
-        const key = process.env["LOVABLE_API_KEY"];
+        // Lovable hosting injects LOVABLE_API_KEY. On Cloudflare/Netlify set
+        // OPENAI_API_KEY (or OPENAI_API_KEY + OPENAI_MODEL) as a server-side
+        // env var instead — never a VITE_ prefixed one.
+        const lovableKey = process.env["LOVABLE_API_KEY"];
+        const openaiKey = process.env["OPENAI_API_KEY"];
+        const key = lovableKey || openaiKey;
         if (!key) {
-          return Response.json({ error: "AI is not configured." }, { status: 500 });
+          return Response.json(
+            {
+              error:
+                "The assistant is not configured on this deployment. Please WhatsApp 099025 43544.",
+            },
+            { status: 500 },
+          );
         }
+
+        const endpoint = lovableKey
+          ? "https://ai.gateway.lovable.dev/v1/chat/completions"
+          : "https://api.openai.com/v1/chat/completions";
+        const model = lovableKey
+          ? "google/gemini-3.6-flash"
+          : process.env["OPENAI_MODEL"] || "gpt-4o-mini";
 
         const live = await liveContext();
         const system = `You are the admissions assistant on the Brilliant Desk Tuitions website.\n\n${BASE_FACTS}\n\n${live}\n\n${STYLE}`;
 
-        const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${key}`,
           },
           body: JSON.stringify({
-            model: "google/gemini-3.6-flash",
+            model,
             temperature: 0.2,
             messages: [
               { role: "system", content: system },
