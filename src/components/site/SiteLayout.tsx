@@ -4,7 +4,6 @@ import { Menu, X, LogIn, LayoutDashboard } from "lucide-react";
 import logo from "@/assets/logo.jpg";
 import { SITE } from "@/lib/site";
 import { useAuth } from "@/lib/useAuth";
-import { ChatWidget } from "@/components/site/ChatWidget";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -145,8 +144,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           © {new Date().getFullYear()} {SITE.name}
         </div>
       </footer>
-
-      <ChatWidget />
     </div>
   );
 }
