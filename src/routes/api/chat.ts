@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { env } from "cloudflare:workers";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -26,9 +25,24 @@ const STYLE = `HOW TO ANSWER:
 - Reply in the same language the visitor uses (English, Kannada or Hindi).
 - Plain text only, no markdown headings or asterisks.`;
 
+// Helper: read env var from multiple possible sources
+function getEnv(name: string): string | undefined {
+  // process.env (polyfilled by Nitro on Cloudflare)
+  try {
+    const pe = (process as any).env?.[name];
+    if (pe && !pe.includes("...")) return pe;
+  } catch {}
+  // Cloudflare global env (if available at runtime)
+  try {
+    const ce = (globalThis as any).env?.[name];
+    if (ce && !ce.includes("...")) return ce;
+  } catch {}
+  return undefined;
+}
+
 async function rest(path: string) {
-  const url = env.VITE_SUPABASE_URL || env.SUPABASE_URL;
-  const key = env.VITE_SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_PUBLISHABLE_KEY;
+  const url = getEnv("VITE_SUPABASE_URL") || getEnv("SUPABASE_URL");
+  const key = getEnv("VITE_SUPABASE_PUBLISHABLE_KEY") || getEnv("SUPABASE_PUBLISHABLE_KEY");
   if (!url || !key) return [];
   try {
     const res = await fetch(`${url}/rest/v1/${path}`, {
@@ -94,11 +108,10 @@ export const Route = createFileRoute("/api/chat")({
           return Response.json({ error: "No messages" }, { status: 400 });
         }
 
-        // Read API key from Cloudflare env (NOT process.env)
-        const lovableKey = env.LOVABLE_API_KEY;
-        const openaiKey = env.OPENAI_API_KEY;
+        const lovableKey = getEnv("LOVABLE_API_KEY");
+        const openaiKey = getEnv("OPENAI_API_KEY");
         const key = lovableKey || openaiKey;
-        if (!key || (openaiKey && openaiKey.includes("..."))) {
+        if (!key) {
           return Response.json(
             {
               error:
@@ -113,7 +126,7 @@ export const Route = createFileRoute("/api/chat")({
           : "https://api.openai.com/v1/chat/completions";
         const model = lovableKey
           ? "google/gemini-3.6-flash"
-          : env.OPENAI_MODEL || "gpt-4o-mini";
+          : getEnv("OPENAI_MODEL") || "gpt-4o-mini";
 
         const live = await liveContext();
         const system = `You are the admissions assistant on the Brilliant Desk Tuitions website.\n\n${BASE_FACTS}\n\n${live}\n\n${STYLE}`;
